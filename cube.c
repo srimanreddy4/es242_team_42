@@ -37,33 +37,33 @@ void enqueue(struct vertex* new_vertex) {
     rear = new_node;  
 };
 
-struct Node1 {  
-    cube_t data;    
-    struct Node1* next;  
-}; 
+// struct Node1 {  
+//     cube_t data;    
+//     struct Node1* next;  
+// }; 
 
-struct Node1* front1 = NULL;  
-struct Node1* rear1 = NULL;  
-void venqueue(cube_t cube ) { 
-    vis++;
-    struct Node1* new_node = (struct Node1*)malloc(sizeof(struct Node1));  
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-        new_node->data[i][j] = cube[i][j];              
-        }
+// struct Node1* front1 = NULL;  
+// struct Node1* rear1 = NULL;  
+// void venqueue(cube_t cube ) { 
+//     vis++;
+//     struct Node1* new_node = (struct Node1*)malloc(sizeof(struct Node1));  
+//     for (int i = 0; i < 8; i++)
+//     {
+//         for (int j = 0; j < 3; j++)
+//         {
+//         new_node->data[i][j] = cube[i][j];              
+//         }
         
-    }
+//     }
     
-    new_node->next = NULL;  
-    if (front1 == NULL && rear1 == NULL) {  
-        front1 = rear1 = new_node;  
-        return;  
-    }  
-    rear1->next = new_node;  
-    rear1 = new_node;  
-;}
+//     new_node->next = NULL;  
+//     if (front1 == NULL && rear1 == NULL) {  
+//         front1 = rear1 = new_node;  
+//         return;  
+//     }  
+//     rear1->next = new_node;  
+//     rear1 = new_node;  
+// ;}
 
 struct vertex* dequeue() {  
     if (front == NULL) {  
@@ -195,8 +195,26 @@ struct vertex {
     cube_t cube;  
 };
 
-int is_equal(cube_t cube1,cube_t cube2){
-    
+int is_solid(cube_t cube){
+    if (cube[0][0]!=cube[1][0] || cube[0][0]!=cube[2][0] || cube[0][0]!=cube[3][0]){
+        return 0;
+    }
+    if (cube[4][2]!=cube[5][2] || cube[4][2]!=cube[6][2] || cube[4][2]!=cube[7][2]){
+        return 0;
+    }
+    if (cube[0][1]!=cube[3][2] || cube[0][1]!=cube[4][0] || cube[0][1]!=cube[7][1]){
+        return 0;
+    }
+    if (cube[0][2]!=cube[1][1] || cube[0][2]!=cube[4][1] || cube[0][2]!=cube[5][0]){
+        return 0;
+    }
+    if (cube[1][2]!=cube[2][1] || cube[1][2]!=cube[5][1] || cube[1][2]!=cube[6][0]){
+        return 0;
+    }
+    if (cube[2][2]!=cube[3][1] || cube[2][2]!=cube[6][1] || cube[2][2]!=cube[7][0]){
+        return 0;
+    }
+    return 1;
 }
 
 
@@ -209,21 +227,22 @@ int main() {
             scanf("%d", &input_cube[i][j]);             
         }
     }
-    int solid_cube[8][3] = {{0,3,4},
-                            {0,4,2},
-                            {0,2,1},
-                            {0,1,3},
-                            {3,4,5},
-                            {4,2,5},
-                            {2,1,5},
-                            {1,3,5}};
-    venqueue(solid_cube);
+   
+    // int solid_cube[8][3] = {{0,3,4},
+    //                         {0,4,2},
+    //                         {0,2,1},
+    //                         {0,1,3},
+    //                         {3,4,5},
+    //                         {4,2,5},
+    //                         {2,1,5},
+    //                         {1,3,5}};
+    // venqueue(solid_cube);
     struct vertex* new_vertex = (struct vertex*)malloc(sizeof(struct vertex));  
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-        new_vertex->cube[i][j] = solid_cube[i][j];              
+        new_vertex->cube[i][j] = input_cube[i][j];              
         }
     }
     for (int i = 0; i < 12; i++)
@@ -240,14 +259,14 @@ int main() {
         nxt_confg(nxt_confgs,head->cube);
         for (int i = 0; i < 9; i++)
         {
-            struct Node1* ptr = front1;
-            for (int j = 0; j < vis; j++)
-            {
-                if (is_equal(nxt_confgs[i],ptr->data))
-                {
-                    break;
-                }
-                venqueue(nxt_confgs[i]);
+            // struct Node1* ptr = front1;
+            // for (int j = 0; j < vis; j++)
+            // {
+                // if (is_equal(nxt_confgs[i],ptr->data))
+                // {
+                    // break;
+                // }
+                // venqueue(nxt_confgs[i]);
                 struct vertex* new_vertex = (struct vertex*)malloc(sizeof(struct vertex));  
                 for (int k = 0; k < 8; k++)
                 {
@@ -268,7 +287,7 @@ int main() {
                         new_vertex->path[k] = head->path[k];
                     }
                 }
-                if (is_equal(input_cube,new_vertex->cube)){
+                if (is_solid(new_vertex->cube)){
                     for (int k = 0; k < 12; k++)
                     {
                         printf("%d", new_vertex->path[k]);
@@ -278,8 +297,8 @@ int main() {
                 }
                 enqueue(new_vertex);
 
-                ptr = ptr->next;
-            }   
+                // ptr = ptr->next;
+            // }   
         }
         free(head);
     }
