@@ -196,17 +196,6 @@ struct vertex {
 };
 
 int is_equal(cube_t cube1,cube_t cube2){
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            if (cube1[i][j] != cube2[i][j]){
-                return 0;
-            }
-        }
-        
-    }
-    return 1;
     
 }
 
